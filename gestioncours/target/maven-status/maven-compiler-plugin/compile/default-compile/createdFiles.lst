@@ -1,0 +1,9 @@
+entities\Professeurs.class
+dao\AdministrateurDaoImpl.class
+entities\Cours.class
+entities\Etudiants.class
+dao\DaoProfesseurImpl.class
+entities\Administrateur.class
+dao\DaoService.class
+utils\HibernateUtil.class
+dao\DaoEtudiantImpl.class
