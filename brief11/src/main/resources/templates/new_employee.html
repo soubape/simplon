@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>gestion des employes</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+</head>
+<body style="font-size: 16px;">
+	<br>
+	<div class="container">
+		<div class="panel panel-primary">
+			<div class="panel-heading">AJOUTER UN NOUVEAU EMPLOYE</div>
+			<div class="panel-body">
+				<form action="#" th:action="@{/saveEmployee}"
+					th:object="${employee}" method="POST">
+
+					<!-- Add hidden form field to handle update -->
+					<input type="hidden" th:field="*{id}" /> <label for="prenom">Prenom</label>
+					<input id="prenom" name="prenom" type="text"
+						th:field="*{firstName}" class="form-control mb-4 col-4"> <label
+						for="nom">Nom</label> <input id="nom" name="nom" type="text"
+						th:field="*{lastName}" class="form-control mb-4 col-4"> <label
+						for="email">Email</label> <input id="email" name="email"
+						type="text" th:field="*{email}" class="form-control mb-4 col-4">
+					<label for="poste">Poste</label> <input id="poste" name="poste"
+						type="text" th:field="*{poste}" class="form-control mb-4 col-4">
+					<label for="dateembauche">Date embauche</label> <input
+						id="dateembauche" name="dateembauche" type="Date"
+						th:field="*{dateEmbauche}" class="form-control mb-4 col-4">
+					<label for="photo">Photo</label> <input id="photo" name="photo"
+						type="image" th:hrc="Image" th:field="*{image}"
+						class="form-control mb-4 col-4">
+
+					<button type="submit" class="btn btn-primary col-2">Enregistrer</button>
+				</form>
+
+				<hr>
+				<a th:href="@{/}"> Retourner a la liste des employes</a>
+			</div>
+
+		</div>
+	</div>
+	<hr>
+	<footer class="bg-dark text-white pt-5 pb-4">
+			<div class="container text-center text-md-left">
+				<div class="row text-center text-md-left">
+					<div class="col md-3 col-lg-3 col-xl-3 mx-auto mt-3">
+						<h5 class="text-uppercase mb-4 font-weight-bold text-warning">sous
+							talent school morocco</h5>
+						<p>Notre mission est de former les jeunes dans tous les coins du monde aux métiers de demain</p>
+
+					</div>
+					<div class="col md-3 col-lg-3 col-xl-3 mx-auto mt-3">
+						<h5 class="text-uppercase mb-4 font-weight-bold text-warning">simplon, notre partenaire privilégié</h5>
+						<p>Simplon, l’école inclusive qui forme aux métiers du
+							numérique dans toute la France et à l’international.
+							​​​​​​​Rejoignez un réseau de plus de 20 000 apprenants et
+							apprenantes. ​​​​​​​Vous souhaitez vous aussi intégrer un
+							parcours de formation Simplon ou être conseillé-e dans votre
+							parcours ?</p>
+
+					</div>
+					<div class="col md-4 col-lg-2 col-xl-2 mx-auto mt-3">
+						<h5 class="text-uppercase mb-4 font-weight-bold text-warning">pour plus d'informations</h5>
+						<p>
+							<a href="#" style="text-decoration:none;" class="text-uppercase  text-white" > contactez nous</a>
+						</p>
+
+					</div>
+				</div>
+			</div>
+	<div class="text-uppercase text-white" style="text-align: center">TOUS DROITS RESERVES
+				| &copy; Copyright 2022 SOUS TALENT MOROCCO</div>
+		</footer>
+</body>
+</body>
+</html>
