@@ -1,89 +1,40 @@
 package com.stc.management.model;
+import java.util.ArrayList;
+import java.util.List;
 
-import java.util.Set;
-
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import lombok.Data;
 
 @Entity
 @Data
 @Table(name="participant")
-@PrimaryKeyJoinColumn( name = "idParticipant" )
-public class Participant extends Users{
-	
+public class Participant{
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	@Column
+	private String name;
+	@Column
+	private String telephone;
 	@Column
 	private String fullname;
 	@Column
 	private String structure;
 	
 	@ManyToOne
-    @JoinColumn(name = "idResponsable")
+    //@JoinColumn(name = "id_responsable")
     private Responsable responsable;
 
-	@Column
-	 @ManyToMany(cascade = {
-	            CascadeType.PERSIST,
-	            CascadeType.MERGE
-	    })
-	    @JoinTable(
-	            name = "participant_activite",
-	            joinColumns = {@JoinColumn(name = "idUser")},
-	            inverseJoinColumns = {@JoinColumn(name = "idActivite")}
-	    )
-	    private Set<Activite> activites;
-	 
-	
-	 
-	public Participant() {
-			super();
-			// TODO Auto-generated constructor stub
-		}
-	    
-
-	public Participant(Long id,String name, String username, String email, String password, String telephone) {
-		super(id, name, username, email, password, telephone);
-		// TODO Auto-generated constructor stub
-	}
-
-
-	public String getFullname() {
-		return fullname;
-	}
-
-
-	public void setFullname(String fullname) {
-		this.fullname = fullname;
-	}
-
-
-	public String getStructure() {
-		return structure;
-	}
-
-
-	public void setStructure(String structure) {
-		this.structure = structure;
-	}
-
-
-	public Responsable getResponsable() {
-		return responsable;
-	}
-
-
-	public void setResponsable(Responsable responsable) {
-		this.responsable = responsable;
-	}
-
-
-	public Set<Activite> getActivites() {
-		return activites;
-	}
-
-
-	public void setActivites(Set<Activite> activites) {
-		this.activites = activites;
-	}
-
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "participant")
+	private List<Activite> activites= new ArrayList<Activite>();
 }

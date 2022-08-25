@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,8 +22,8 @@ import com.stc.management.repository.ParticipantRepository;
 @RequestMapping("/api/v1/management/participant")
 public class StcParticipantController {
 	
-	 @Autowired
-	 private ParticipantRepository participantrepository;
+//	 @Autowired
+   private ParticipantRepository participantrepository;
 	 
 	 public StcParticipantController(ParticipantRepository participantrepository) {
 		super();
@@ -56,10 +55,11 @@ public class StcParticipantController {
 	    	Participant participant =  participantrepository.findById(id)
 	                .orElseThrow(() -> new ResourceNotFoundException("Participant not exist with id: " + id));
 
+	    	participant.setName(participantDetails.getName());
 	    	participant.setFullname(participantDetails.getFullname());
-	    	participant.setEmail(participantDetails.getEmail());
 	    	participant.setStructure(participantDetails.getStructure());
 	    	participant.setTelephone(participantDetails.getTelephone());
+	    	//participant.setActivites(participantDetails.getActivites());
 	    	participant.setResponsable(participantDetails.getResponsable());
 	    	participantrepository.save(participant);
 	        return ResponseEntity.ok(participant);

@@ -1,12 +1,13 @@
-package com.stc.management.model;
+package com.stc.management;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class Brief13stcmanagementApplication {
+public class StcmanageApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(Brief13stcmanagementApplication.class, args);
+		SpringApplication.run(StcmanageApplication.class, args);
 	}
+
 }

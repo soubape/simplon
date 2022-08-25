@@ -1,15 +1,13 @@
 package com.stc.management.repository;
 
-import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import com.stc.management.model.Responsable;
 
 
-import com.stc.management.model.Users;
-
-public interface UsersRepository extends JpaRepository<Users, Long> {
-
-	List<Users> findAll();
+@Repository
+public interface ResponsableRepository extends JpaRepository<Responsable, Long>{
 	
 //	Administrateur create(Administrateur administrateur);
 //	Administrateur getAdministrateurById(long id);
