@@ -64,8 +64,8 @@ public class StcActiviteController {
 		activite.setDescription(activiteDetails.getDescription());
 		activite.setDateDebut(activiteDetails.getDateDebut());
 		activite.setDateFin(activiteDetails.getDateFin());
-//		activite.setExercices(activiteDetails.getExercices());
-//		activite.setParticipants(activiteDetails.getParticipants());
+		activite.setParticipants(activiteDetails.getParticipants());
+		activite.setResponsable(activiteDetails.getResponsable());
 		activitepository.save(activite);
 		return ResponseEntity.ok(activite);
 	}
