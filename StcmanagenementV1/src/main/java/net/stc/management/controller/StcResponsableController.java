@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import net.stc.management.exception.ResourceNotFoundException;
 import net.stc.management.model.Responsable;
 import net.stc.management.repository.ResponsableRepository;
+import net.stc.management.services.impl.ResponsableServicesImpl;
 
 
 @CrossOrigin("*")
@@ -24,59 +25,42 @@ import net.stc.management.repository.ResponsableRepository;
 @RequestMapping("/api/v1/management/responsable")
 public class StcResponsableController {
 
-	 private ResponsableRepository responsablerepository;
+	 private ResponsableServicesImpl responsableServicesImpl;
 	 
 	 
-	 public StcResponsableController(ResponsableRepository responsablerepository) {
-		this.responsablerepository = responsablerepository;
+	 public StcResponsableController(ResponsableServicesImpl responsableServicesImpl) {
+		this.responsableServicesImpl = responsableServicesImpl;
 	}
 	@GetMapping 
 	 private List<Responsable> getAllResponsables()   
 	 {  
-	 return responsablerepository.findAll();  
+	 return responsableServicesImpl.getAll();  
 	 }  
 	 // build create employee REST API
-	 @PostMapping(consumes={"application/json"})
+	 @PostMapping
 	 public Responsable create(@RequestBody Responsable responsable) {
-		 return responsablerepository.save(responsable);
+		 return responsableServicesImpl.save(responsable);
 	
 	 }
 
 	 // build get employee by id REST API
 	    @GetMapping("{id}")
-	    public ResponseEntity<Responsable> getResponsableById(@PathVariable  long id){
-	    	Responsable responsable =  responsablerepository.findById(id)
-	                .orElseThrow(() -> new ResourceNotFoundException("Responsable not exist with id:" + id));
-	        return ResponseEntity.ok(responsable);
+	    public Responsable getResponsableById(@PathVariable  long id){
+	    	return responsableServicesImpl.getById(id);
 	    }
 
 	    //build update employee REST API
 	    @PutMapping("{id}")
-	    public ResponseEntity<Responsable> updateResponsable(@PathVariable long id,@RequestBody Responsable responsableDetails) {
-	    	Responsable responsable =  responsablerepository.findById(id)
-	                .orElseThrow(() -> new ResourceNotFoundException("Responsable not exist with id: " + id));
-
-	    	responsable.setDomaine(responsableDetails.getDomaine());
-	    	responsable.setEtat(responsableDetails.isEtat());
-	    	responsable.setName(responsableDetails.getName());
-	    	responsable.setTelephone(responsableDetails.getTelephone());
-	    	responsable.setTyperesponsable(responsableDetails.getTyperesponsable());
-	    	responsable.setActivites(responsableDetails.getActivites());
-	    	responsablerepository.save(responsable);
-	        return ResponseEntity.ok(responsable);
+	    public ResponseEntity<Responsable> updateResponsable(@PathVariable long id,@RequestBody Responsable responsable) {
+	    	responsableServicesImpl.getById(id);
+	    	return new ResponseEntity<Responsable>(responsableServicesImpl.getById(id),HttpStatus.OK);
 	    }
 	    
 
 	    // build delete employee REST API
 	    @DeleteMapping("{id}")
-	    public ResponseEntity<HttpStatus> deleteResponsable(@PathVariable long id){
-
-	        Responsable responsable = responsablerepository.findById(id)
-	                .orElseThrow(() -> new ResourceNotFoundException("Responsable not exist with id: " + id));
-
-	        responsablerepository.delete(responsable);
-
-	        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	    public void deleteResponsable(@PathVariable long id){
+	    	responsableServicesImpl.delete(id);
 
 	    }
 

@@ -2,7 +2,6 @@ package net.stc.management.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -15,9 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import net.stc.management.exception.ResourceNotFoundException;
 import net.stc.management.model.Activite;
-import net.stc.management.repository.ActiviteRepository;
 import net.stc.management.services.impl.ActiviteServicesImpl;
 
 
@@ -54,15 +51,15 @@ public class StcActiviteController {
 
 	// build update employee REST API
 	@PutMapping("{id}")
-	public void updateActivite(@PathVariable Long id, @RequestBody Activite activiteDetails) {
-		return ;
+	public ResponseEntity<Activite>  updateActivite(@PathVariable("id") Long id, @RequestBody Activite activite) {
+		activiteServicesImpl.update(activite, id);
+		return  new ResponseEntity<>(activiteServicesImpl.getById(id), HttpStatus.OK) ;
 	}
 
 	// build delete employee REST API
 	@DeleteMapping("{id}")
 	public void deleteexercice(@PathVariable Long id) {
-
-		return;
+		activiteServicesImpl.delete(id);
 
 	}
 

@@ -17,65 +17,51 @@ import org.springframework.web.bind.annotation.RestController;
 import net.stc.management.exception.ResourceNotFoundException;
 import net.stc.management.model.Exercice;
 import net.stc.management.repository.ExercieRepository;
+import net.stc.management.services.impl.ExerciceServicesImpl;
 
 @CrossOrigin("*")
 @RestController
 @RequestMapping("/api/v1/management/exercice")
 public class StcExercieController {
 
-	private ExercieRepository exercicerepository;
+	private ExerciceServicesImpl exerciceServicesImpl;
 
 	
-	public StcExercieController(ExercieRepository exercicerepository) {
-		this.exercicerepository = exercicerepository;
+	public StcExercieController(ExerciceServicesImpl exerciceServicesImpl) {
+		this.exerciceServicesImpl = exerciceServicesImpl;
 	}
 
 	@GetMapping
 	private List<Exercice> getAllExercices() {
-		return exercicerepository.findAll();
+		return exerciceServicesImpl.getAll();
 	}
 
 	// build create employee REST API
-	@PostMapping(consumes={"application/json"})
+	@PostMapping
 	public Exercice create(@RequestBody Exercice exercice) {
-		return exercicerepository.save(exercice);
+		return exerciceServicesImpl.save(exercice);
 
 	}
 
 	// build get employee by id REST API
 	@GetMapping("{id}")
-	public ResponseEntity<Exercice> getExerciceById(@PathVariable long id) {
-		Exercice exercice = exercicerepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Exercice not exist with id:" + id));
-		return ResponseEntity.ok(exercice);
+	public Exercice getExerciceById(@PathVariable long id) {
+				
+		return exerciceServicesImpl.getById(id);
 	}
 
 	// build update employee REST API
 	@PutMapping("{id}")
-	public ResponseEntity<Exercice> updateExercice(@PathVariable long id, @RequestBody Exercice exerciceDetails) {
-		Exercice exercice = exercicerepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Exercice not exist with id: " + id));
-
-		exercice.setAnnee(exerciceDetails.getAnnee());
-		exercice.setDateDebut(exerciceDetails.getDateDebut());
-		exercice.setDateFin(exerciceDetails.getDateFin());
-		exercice.setStatut(exerciceDetails.isStatut());
-		exercice.setActivites(exerciceDetails.getActivites());
-		//exercice.setActivites(exerciceDetails.getActivites());
-		exercicerepository.save(exercice);
-		return ResponseEntity.ok(exercice);
+	public ResponseEntity<Exercice> updateExercice(@PathVariable("id") long id, @RequestBody Exercice exercice) {
+		exerciceServicesImpl.update(exercice, id);
+		return new ResponseEntity<Exercice>(exerciceServicesImpl.getById(id), HttpStatus.OK) ;
+			
 	}
 
 	// build delete employee REST API
 	@DeleteMapping("{id}")
-	public ResponseEntity<HttpStatus> deleteexercice(@PathVariable long id) {
-
-		Exercice exercice = exercicerepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Exercice not exist with id: " + id));
-
-		exercicerepository.delete(exercice);
-
-		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	public void deleteexercice(@PathVariable long id) {
+		exerciceServicesImpl.delete(id);
 
 	}
 

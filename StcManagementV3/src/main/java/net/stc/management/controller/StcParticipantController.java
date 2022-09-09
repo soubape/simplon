@@ -2,6 +2,8 @@ package net.stc.management.controller;
 
 import java.util.List;
 
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,6 +20,7 @@ import net.stc.management.services.impl.ParticipantServicesImpl;
 
 @RestController
 @RequestMapping("/api/v1/management/participant")
+
 public class StcParticipantController {
 
 	private ParticipantServicesImpl participantserviceimpl;

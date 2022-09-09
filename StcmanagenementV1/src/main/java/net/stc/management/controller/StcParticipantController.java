@@ -16,62 +16,47 @@ import org.springframework.web.bind.annotation.RestController;
 import net.stc.management.exception.ResourceNotFoundException;
 import net.stc.management.model.Participant;
 import net.stc.management.repository.ParticipantRepository;
+import net.stc.management.services.impl.ParticipantServicesImpl;
 
 @RestController
 @RequestMapping("/api/v1/management/participant")
 public class StcParticipantController {
 
-   private ParticipantRepository participantrepository;
+	private ParticipantServicesImpl participantserviceimpl;
 	 
-	 public StcParticipantController(ParticipantRepository participantrepository) {
-		this.participantrepository = participantrepository;
+	 public StcParticipantController(ParticipantServicesImpl participantserviceimpl) {
+		this.participantserviceimpl = participantserviceimpl;
 	}
 	@GetMapping  
 	 private List<Participant> getAllParticipants()   
 	 {  
-	 return participantrepository.findAll();  
+	 return participantserviceimpl.getAll();  
 	 }  
 	 // build create employee REST API
-	 @PostMapping(consumes={"application/json"})
+	 @PostMapping
 	 public Participant create(Participant participant) {
-		 return participantrepository.save(participant);
+		 return participantserviceimpl.save(participant);
 	
 	 }
 
 	 // build get employee by id REST API
 	    @GetMapping("{id}")
-	    public ResponseEntity<Participant> getParticipantById(@PathVariable  long id){
-	    	Participant participant =  participantrepository.findById(id)
-	                .orElseThrow(() -> new ResourceNotFoundException("Participant not exist with id:" + id));
-	        return ResponseEntity.ok(participant);
+	    public Participant getParticipantById(@PathVariable  long id){
+	    	return participantserviceimpl.getById(id);
 	    }
 
 	    //build update employee REST API
 	    @PutMapping("{id}")
-	    public ResponseEntity<Participant> updateParticipant(@PathVariable long id,@RequestBody Participant participantDetails) {
-	    	Participant participant =  participantrepository.findById(id)
-	                .orElseThrow(() -> new ResourceNotFoundException("Participant not exist with id: " + id));
-
-	    	participant.setName(participantDetails.getName());
-	    	participant.setFullname(participantDetails.getFullname());
-	    	participant.setStructure(participantDetails.getStructure());
-	    	participant.setTelephone(participantDetails.getTelephone());
-	    	participant.setResponsable(participantDetails.getResponsable());
-	    	participant.setActivites(participantDetails.getActivites());
-	    	participantrepository.save(participant);
-	        return ResponseEntity.ok(participant);
+	    public ResponseEntity<Participant> updateParticipant(@PathVariable("id") long id,@RequestBody Participant participant) {
+	    	participantserviceimpl.getById(id);
+	        return new ResponseEntity<Participant>(participantserviceimpl.getById(id), HttpStatus.OK);
 	    }
 	    
 
 	    // build delete employee REST API
 	    @DeleteMapping("{id}")
-	    public ResponseEntity<HttpStatus> deleteParticipant(@PathVariable long id){
-
-	        Participant participant = participantrepository.findById(id)
-	                .orElseThrow(() -> new ResourceNotFoundException("Participant not exist with id: " + id));
-	        participantrepository.delete(participant);
-
-	        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	    public void deleteParticipant(@PathVariable long id){
+	    	participantserviceimpl.delete(id);
 
 	    }
 

@@ -41,7 +41,6 @@ public class ExerciceServicesImpl implements StcServices<Exercice>{
 	@Override
 	public void update(Exercice exercice, Long id) {
 		Exercice exercice1 =  exercicerepository.findById(id).get();
-		
 		exercice1.setAnnee(exercice.getAnnee());
 		exercice1.setDateDebut(exercice.getDateDebut());
 		exercice1.setDateFin(exercice.getDateFin());

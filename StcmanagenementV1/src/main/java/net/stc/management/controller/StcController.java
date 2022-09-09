@@ -13,11 +13,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import net.stc.management.exception.ResourceNotFoundException;
 import net.stc.management.model.Administrateur;
 import net.stc.management.repository.AdministrateurRepository;
+import net.stc.management.services.impl.AdministrateurServicesImpl;
 
 
 @CrossOrigin("*")
@@ -25,55 +27,41 @@ import net.stc.management.repository.AdministrateurRepository;
 @RequestMapping("/api/v1/management")
 public class StcController {
 	
-	 private AdministrateurRepository administrateurrepository;
+	 private AdministrateurServicesImpl administrateurServicesImpl;
 	 	 
-	 public StcController(AdministrateurRepository administrateurrepository) {
-		this.administrateurrepository = administrateurrepository;
+	 public StcController(AdministrateurServicesImpl administrateurServicesImpl) {
+		this.administrateurServicesImpl = administrateurServicesImpl;
 	}
 	@GetMapping
 	 private List<Administrateur> getAlladministrateurs()   
 	 {  
-		 return administrateurrepository.findAll();  
+		 return administrateurServicesImpl.getAll();  
 	 }  
 	 // build create employee REST API
-	 @PostMapping(consumes={"application/json"})
+	 @PostMapping
 	 public Administrateur create(Administrateur administrateur) {
-		 return administrateurrepository.save(administrateur);
+		 return administrateurServicesImpl.save(administrateur);
 	
 	 }
 
 	 // build get employee by id REST API
 	    @GetMapping("{id}")
-	    public ResponseEntity<Administrateur> getAdministrateurById(@PathVariable  long id){
-	    	Administrateur administrateur =  administrateurrepository.findById(id)
-	                .orElseThrow(() -> new ResourceNotFoundException("Administrateur not exist with id:" + id));
-	        return ResponseEntity.ok(administrateur);
+	    public Administrateur getAdministrateurById(@PathVariable("id")  long id){
+	    	return administrateurServicesImpl.getById(id);
 	    }
 
 	    //build update employee REST API
 	    @PutMapping("{id}")
-	    public ResponseEntity<Administrateur> updateAdministrateur(@PathVariable long id,@RequestBody Administrateur administrateurDetails) {
-	    	Administrateur administrateur =  administrateurrepository.findById(id)
-	                .orElseThrow(() -> new ResourceNotFoundException("Administrateur not exist with id: " + id));
-
-	    	administrateur.setName(administrateurDetails.getName());
-	    	administrateur.setUsername(administrateurDetails.getUsername());
-	    	administrateur.setEmail(administrateurDetails.getEmail());
-	    	administrateur.setPassword(administrateurDetails.getPassword());
-	    	administrateur.setTelephone(administrateurDetails.getTelephone());
-	    	administrateurrepository.save(administrateur);
-	        return ResponseEntity.ok(administrateur);
+	    public ResponseEntity<Administrateur> updateAdministrateur(@PathVariable("id") long id,@RequestBody Administrateur administrateur) {
+	    	administrateurServicesImpl.update(administrateur, id);
+			return  new ResponseEntity<>(administrateurServicesImpl.getById(id), HttpStatus.OK) ;
 	    }
 	    
 
 	    // build delete employee REST API
 	    @DeleteMapping("{id}")
-	    public ResponseEntity<HttpStatus> deleteadministrateur(@PathVariable long id){
-
-	        Administrateur administrateur = administrateurrepository.findById(id)
-	                .orElseThrow(() -> new ResourceNotFoundException("Administrateur not exist with id: " + id));
-	        administrateurrepository.delete(administrateur);
-	        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	    public void deleteadministrateur(@PathVariable("id") long id){
+	      administrateurServicesImpl.delete(id);
 
 	    }
 

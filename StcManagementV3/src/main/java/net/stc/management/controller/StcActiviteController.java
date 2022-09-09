@@ -2,6 +2,8 @@ package net.stc.management.controller;
 
 import java.util.List;
 
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import net.stc.management.model.Activite;
@@ -19,6 +22,7 @@ import net.stc.management.services.impl.ActiviteServicesImpl;
 
 @RestController
 @RequestMapping("/api/v1/management/activite")
+
 public class StcActiviteController {
 
 	private ActiviteServicesImpl activiteServicesImpl;
@@ -30,12 +34,14 @@ public class StcActiviteController {
 	}
 
 	@GetMapping
+	@ResponseStatus(HttpStatus.CREATED)
 	private List<Activite> getAllActivites() {
 		return activiteServicesImpl.getAll();
 	}
 
 	// build create employee REST API
 	@PostMapping
+	@ResponseStatus(HttpStatus.CREATED)
 	public Activite create(@RequestBody Activite activite) {
 		return activiteServicesImpl.save(activite);
 
@@ -43,6 +49,7 @@ public class StcActiviteController {
 
 	// build get employee by id REST API
 	@GetMapping("{id}")
+	@ResponseStatus(HttpStatus.CREATED)
 	public Activite getActiviteById(@PathVariable Long id) {
 		return activiteServicesImpl.getById(id);
 	}
@@ -56,6 +63,7 @@ public class StcActiviteController {
 
 	// build delete employee REST API
 	@DeleteMapping("{id}")
+	@ResponseStatus(HttpStatus.CREATED)
 	public void deleteexercice(@PathVariable Long id) {
 		activiteServicesImpl.delete(id);
 
