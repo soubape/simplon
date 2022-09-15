@@ -1,4 +1,4 @@
-package com.example.demo.entities;
+package com.example.demo.controller;
 
 import java.util.List;
 
@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.entities.Employe;
+import com.example.demo.services.EmployeServiceImpl;
+
 @RestController
-public class EmployeController {
-	
+public class EmployeController  {
 	@Autowired
 	private EmployeServiceImpl employeServiceImpl;
 

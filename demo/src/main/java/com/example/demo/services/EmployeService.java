@@ -1,6 +1,8 @@
-package com.example.demo.entities;
+package com.example.demo.services;
 
 import java.util.List;
+
+import com.example.demo.entities.Employe;
 
 public interface EmployeService {
 	Employe create(Employe employe);
