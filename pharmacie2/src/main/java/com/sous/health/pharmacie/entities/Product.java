@@ -1,11 +1,20 @@
 package com.sous.health.pharmacie.entities;
 
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -24,19 +33,47 @@ public class Product{
 	@Column(name="quantity")
 	private int quantity;
 	
-	@ManyToMany(fetch = FetchType.EAGER,
-		      cascade = {
-		          CascadeType.PERSIST,
-		          CascadeType.MERGE
-		      },
-		      mappedBy = "products")
-		  @JsonIgnore
-		  private Set<Categorie> categories = new HashSet<>();
+	@ManyToOne(fetch = FetchType.LAZY, optional = true)
+	  @JoinColumn(name = "categorie_id")
+//	  @OnDelete(action = OnDeleteAction.CASCADE)
+	@JsonIgnore
+	private Categorie categorie;
 	
+	@ManyToOne(fetch = FetchType.LAZY, optional = true)
+	  @JoinColumn(name = "user_id")
+//	  @OnDelete(action = OnDeleteAction.CASCADE)
+	@JsonIgnore
+	private User user;
+	
+	@ManyToOne(fetch = FetchType.LAZY, optional = true)
+	  @JoinColumn(name = "commande_id")
+//	  @OnDelete(action = OnDeleteAction.CASCADE)
+	@JsonIgnore
+	private Commande commande;
+//	@ManyToMany(fetch = FetchType.EAGER,
+//		      cascade = {
+//		          CascadeType.PERSIST,
+//		          CascadeType.MERGE
+//		      },
+//		      mappedBy = "products")
+//		  @JsonIgnore
+//		  private Set<Categorie> categories = new HashSet<>();
 	public Product() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+	
+	
+	
+	public Product(String title, String description, int quantity, Categorie categorie) {
+	super();
+	this.title = title;
+	this.description = description;
+	this.quantity = quantity;
+	this.categorie = categorie;
+}
+
+
 
 	public Long getId() {
 		return id;

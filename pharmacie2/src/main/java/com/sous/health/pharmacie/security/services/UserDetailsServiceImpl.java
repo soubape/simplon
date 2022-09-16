@@ -15,27 +15,6 @@ import com.sous.health.pharmacie.repository.UserRepository;
 public class UserDetailsServiceImpl implements UserDetailsService {
 	@Autowired
 	UserRepository userRepository;
-	
-	
-
-	public UserDetailsServiceImpl(UserRepository userRepository) {
-		super();
-		this.userRepository = userRepository;
-	}
-
-
-
-	public UserRepository getUserRepository() {
-		return userRepository;
-	}
-
-
-
-	public void setUserRepository(UserRepository userRepository) {
-		this.userRepository = userRepository;
-	}
-
-
 
 	@Override
 	@Transactional
@@ -46,5 +25,4 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		return UserDetailsImpl.build(user);
 	}
 
-	
 }

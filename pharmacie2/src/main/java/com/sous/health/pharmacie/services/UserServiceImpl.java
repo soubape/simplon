@@ -2,6 +2,7 @@ package com.sous.health.pharmacie.services;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sous.health.pharmacie.entities.User;
@@ -9,6 +10,7 @@ import com.sous.health.pharmacie.repository.UserRepository;
 
 @Service
 public class UserServiceImpl implements PharmacieServices<User>{
+	@Autowired
 	private UserRepository userRepository;
 
 	

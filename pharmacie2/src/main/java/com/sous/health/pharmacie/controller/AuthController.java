@@ -20,58 +20,63 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sous.health.pharmacie.entities.RefreshToken;
 import com.sous.health.pharmacie.entities.Role;
 import com.sous.health.pharmacie.entities.URole;
 import com.sous.health.pharmacie.entities.User;
 import com.sous.health.pharmacie.payload.request.LoginRequest;
 import com.sous.health.pharmacie.payload.request.SignupRequest;
+import com.sous.health.pharmacie.payload.request.TokenRefreshRequest;
 import com.sous.health.pharmacie.payload.response.JwtResponse;
 import com.sous.health.pharmacie.payload.response.MessageResponse;
 import com.sous.health.pharmacie.repository.RoleRepository;
 import com.sous.health.pharmacie.repository.UserRepository;
 import com.sous.health.pharmacie.security.jwt.JwtUtils;
 import com.sous.health.pharmacie.security.services.UserDetailsImpl;
+import com.sous.health.pharmacie.services.RefreshTokenService;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
-	@Autowired
-	AuthenticationManager authenticationManager;
+  @Autowired
+  AuthenticationManager authenticationManager;
 
-	@Autowired
-	UserRepository userRepository;
+  @Autowired
+  JwtUtils jwtUtils;
 
-	@Autowired
-	RoleRepository roleRepository;
+  @Autowired
+  UserRepository userRepository;
+  
+  @Autowired
+  RoleRepository roleRepository;
+  
+  @Autowired
+  PasswordEncoder encoder;
+  
+  @Autowired
+  RefreshTokenService refreshTokenService;
 
-	@Autowired
-	PasswordEncoder encoder;
+ 
+  @PostMapping("/signin")
+  public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
-	@Autowired
-	JwtUtils jwtUtils;
+    Authentication authentication = authenticationManager
+        .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
-	@PostMapping("/signin")
-	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+    SecurityContextHolder.getContext().setAuthentication(authentication);
 
-		Authentication authentication = authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+    UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-		String jwt = jwtUtils.generateJwtToken(authentication);
-		
-		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();		
-		List<String> roles = userDetails.getAuthorities().stream()
-				.map(item -> item.getAuthority())
-				.collect(Collectors.toList());
+    String jwt = jwtUtils.generateJwtToken((Authentication) userDetails);
 
-		return ResponseEntity.ok(new JwtResponse(jwt, 
-												 userDetails.getId(), 
-												 userDetails.getUsername(), 
-												 userDetails.getPassword(), 
-												 roles));
-	}
+    List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
+        .collect(Collectors.toList());
 
+    RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
+
+    return ResponseEntity.ok(new JwtResponse(jwt, refreshToken.getToken(), userDetails.getId(),
+        userDetails.getUsername(), roles));
+  }
 	@PostMapping("/signup")
 	public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
 		if (userRepository.existsByUsername(signUpRequest.getUsername())) {
@@ -97,29 +102,29 @@ public class AuthController {
 			Role userRole = roleRepository.findByName(URole.ROLE_VISITOR)
 					.orElseThrow(() -> new RuntimeException("Error0: Role is not found."));
 			roles.add(userRole);
-			System.out.println("visitor");
+//			System.out.println("visitor");
 		} else {
 			strRoles.forEach(role -> {
 				switch (role) {
 				case "admin":
 					Role adminRole = roleRepository.findByName(URole.ROLE_ADMIN)
-							.orElseThrow(() -> new RuntimeException("Error1: Role is not found."));
+							.orElseThrow(() -> new RuntimeException("Error saving admin : Role is not found."));
 					roles.add(adminRole);
 					user.setRoles(roles);
 					userRepository.save(user);
-					System.out.println("admin");
+//					System.out.println("admin");
 					break;
-				case "cl":
+				case "client":
 					Role modRole = roleRepository.findByName(URole.ROLE_CLIENT)
-							.orElseThrow(() -> new RuntimeException("Error2: Role is not found."));
+							.orElseThrow(() -> new RuntimeException("Error saving client : Role is not found."));
 					roles.add(modRole);
 					user.setRoles(roles);
 					userRepository.save(user);
-					System.out.println("client");
+//					System.out.println("client");
 					break;
 				default:
 					Role userRole = roleRepository.findByName(URole.ROLE_VISITOR)
-							.orElseThrow(() -> new RuntimeException("Error3: Role is not found."));
+							.orElseThrow(() -> new RuntimeException("Error saving visitor : Role is not found."));
 					roles.add(userRole);
 					user.setRoles(roles);
 					userRepository.save(user);

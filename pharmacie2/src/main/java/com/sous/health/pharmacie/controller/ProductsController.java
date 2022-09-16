@@ -22,7 +22,7 @@ import com.sous.health.pharmacie.services.UserServiceImpl;
 
 
 @RestController
-@RequestMapping("/api/v1/pharmacie/products")
+@RequestMapping("/api/products")
 public class ProductsController {
 	@Autowired
 	private ProductServiceImpl prodImpl;
@@ -32,7 +32,7 @@ public class ProductsController {
 		this.prodImpl = prodImpl;
 	}
 
-	@GetMapping("/allProducts")
+	@GetMapping
 	  List<Product> findAll() {
 	    return prodImpl.getAll();
 

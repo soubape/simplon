@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,10 +21,14 @@ import com.sous.health.pharmacie.entities.User;
 import com.sous.health.pharmacie.services.CategorieServiceImpl;
 import com.sous.health.pharmacie.services.UserServiceImpl;
 
-
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/v1/pharmacie/categories")
+@RequestMapping("/api/categories")
 public class CategorieController {
+	@GetMapping("/all")
+	public String allAccess() {
+		return "Access to all categories.";
+	}
 	@Autowired
 	private CategorieServiceImpl catImpl;
 
@@ -32,7 +37,7 @@ public class CategorieController {
 		this.catImpl = catImpl;
 	}
 
-	@GetMapping("/allCategories")
+	@GetMapping
 	  List<Categorie> findAll() {
 	    return catImpl.getAll();
 

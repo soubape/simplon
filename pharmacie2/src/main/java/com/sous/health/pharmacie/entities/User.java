@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Entity
 @Table(name="User",
 uniqueConstraints = {
+		@UniqueConstraint(columnNames = "fullname"),
         @UniqueConstraint(columnNames = "username"),
         @UniqueConstraint(columnNames = "password")
     })
@@ -32,6 +33,7 @@ public class User{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	//@NotBlank
 	@Column(name="fullname")
 	private String fullname;
 	@NotBlank
@@ -47,9 +49,9 @@ public class User{
 	             inverseJoinColumns = @JoinColumn(name = "role_id"))
 	  private Set<Role> roles = new HashSet<>();
 	
-	@OneToMany( targetEntity=Categorie.class, mappedBy="user" )
+	@OneToMany( targetEntity=Product.class, mappedBy="user" )
 	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) 
-	private Set<Categorie> categories = new HashSet<>();
+	private Set<Product> products = new HashSet<>();
 
 	public User() {
 		super();
@@ -62,13 +64,14 @@ public class User{
 		this.password = password;
 	}
 
-	public User(String fullname, @NotBlank String username, @NotBlank String password,
-			Set<Categorie> categories) {
+	public User(String fullname, @NotBlank String username, @NotBlank String password, Set<Role> roles,
+			Set<Product> products) {
 		super();
 		this.fullname = fullname;
 		this.username = username;
 		this.password = password;
-		this.categories = categories;
+		this.roles = roles;
+		this.products = products;
 	}
 
 	public Long getId() {
@@ -111,17 +114,17 @@ public class User{
 		this.roles = roles;
 	}
 
-	public Set<Categorie> getCategories() {
-		return categories;
+	public Set<Product> getProducts() {
+		return products;
 	}
 
-	public void setCategories(Set<Categorie> categories) {
-		this.categories = categories;
+	public void setProducts(Set<Product> products) {
+		this.products = products;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(categories, fullname, id, password, roles, username);
+		return Objects.hash(fullname, id, password, products, roles, username);
 	}
 
 	@Override
@@ -133,10 +136,10 @@ public class User{
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
-		return Objects.equals(categories, other.categories) && Objects.equals(fullname, other.fullname)
-				&& Objects.equals(id, other.id) && Objects.equals(password, other.password)
+		return Objects.equals(fullname, other.fullname) && Objects.equals(id, other.id)
+				&& Objects.equals(password, other.password) && Objects.equals(products, other.products)
 				&& Objects.equals(roles, other.roles) && Objects.equals(username, other.username);
 	}
-	
+
 	
 }
